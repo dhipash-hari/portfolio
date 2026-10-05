@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://dhipash.dev/</loc>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://dhipash.dev/projects/red-lenz</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://dhipash.dev/projects/mark-analysis</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://dhipash.dev/projects/sri-thirumalai-kalaikoodam</loc>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://dhipash.dev/projects/quiz-master</loc>
+    <priority>0.80</priority>
+  </url>
+</urlset>
