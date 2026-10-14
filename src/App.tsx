@@ -11,6 +11,7 @@ const AdminLogin = lazy(() => import('./pages/AdminLogin').then(m => ({ default:
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ default: m.AdminDashboard })));
 const SimpleAdminDashboard = lazy(() => import('./pages/SimpleAdminDashboard').then(m => ({ default: m.SimpleAdminDashboard })));
 const AdminDebug = lazy(() => import('./pages/AdminDebug').then(m => ({ default: m.AdminDebug })));
+const CyberOpsPage = lazy(() => import('./pages/CyberOpsPage').then(m => ({ default: m.CyberOpsPage })));
 
 const PageLoader = () => (
   <div className="min-h-screen bg-[#08090B] flex flex-col items-center justify-center text-white">
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/projects/:slug" element={<ProjectDetails />} />
+              <Route path="/cyber-ops" element={<CyberOpsPage />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin/simple" element={<Navigate to="/admin" replace />} />
               <Route path="/admin/debug" element={<Navigate to="/admin" replace />} />

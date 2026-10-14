@@ -115,3 +115,46 @@
 .animate-float {
   animation: float 4s ease-in-out infinite;
 }
+
+/* 3D Perspective & Hardware Acceleration */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-1500 {
+  perspective: 1500px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Subtle holographic scanline pattern */
+.bg-scanlines {
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(0, 0, 0, 0.2) 50%
+  );
+  background-size: 100% 4px;
+}
+
+/* Atmospheric vignette */
+.radial-vignette {
+  background: radial-gradient(circle at center, transparent 30%, rgba(8, 9, 11, 0.85) 100%);
+}
+
+/* Specular sweep effect */
+.shine-overlay {
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(0, 229, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(0, 229, 255, 0.08) 55%,
+    transparent 80%
+  );
+}

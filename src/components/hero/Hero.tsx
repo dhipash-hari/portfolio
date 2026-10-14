@@ -1,7 +1,8 @@
-import React, { Suspense, lazy } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowDownRight, Sparkles, Terminal } from 'lucide-react';
+import React, { Suspense, lazy, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowDownRight, Sparkles, Terminal, Activity, Compass } from 'lucide-react';
 import { MagneticButton } from '../common/MagneticButton';
+import { CinematicHoloFallback } from '../three/HoloFallback';
 import { SiteSettings } from '../../types/portfolio';
 
 const HeroScene = lazy(() => import('../three/HeroScene').then(m => ({ default: m.HeroScene })));
@@ -11,8 +12,19 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ settings }) => {
+  const containerRef = useRef<HTMLElement>(null);
   const badge = settings?.hero_badge || 'AI & DATA SCIENCE / CREATIVE TECHNOLOGY';
   const supporting = settings?.hero_supporting_copy || 'I explore the intersection of artificial intelligence, data, frontend design and motion to create digital experiences that are both functional and visually memorable.';
+
+  // Scroll-driven natural recession
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.2]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 80]);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -22,58 +34,71 @@ export const Hero: React.FC<HeroProps> = ({ settings }) => {
   };
 
   return (
-    <section className="relative min-h-screen pt-28 pb-16 md:py-0 flex items-center justify-center overflow-hidden">
-      {/* Background glow accents */}
-      <div className="absolute top-1/4 left-10 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl pointer-events-none -z-10" />
+    <motion.section
+      ref={containerRef}
+      style={{ scale: heroScale, opacity: heroOpacity, y: heroY }}
+      className="relative min-h-screen pt-28 pb-16 md:py-0 flex items-center justify-center overflow-hidden"
+    >
+      {/* Cinematic atmospheric lighting sweeps */}
+      <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-[#00E5FF]/8 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute bottom-10 right-0 w-[550px] h-[550px] bg-blue-600/8 rounded-full blur-[160px] pointer-events-none -z-10" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-indigo-950/20 rounded-full blur-[180px] pointer-events-none -z-10" />
       
-      {/* Grid overlay */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-60 pointer-events-none -z-10" />
+      {/* Fine cyber grid & scanlines */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none -z-10" />
+      <div className="absolute inset-0 radial-vignette pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-        {/* Left Column: Asymmetric Editorial Typography */}
+        {/* Left Column: Asymmetrical Oversized Editorial Typography */}
         <div className="lg:col-span-7 flex flex-col justify-center z-10">
-          {/* Category Badge */}
+          {/* Category Badge with Live Pulse */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-zinc-900/80 border border-[#00E5FF]/30 w-fit mb-6 shadow-[0_0_20px_rgba(0,229,255,0.1)]"
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-zinc-900/90 border border-[#00E5FF]/30 w-fit mb-6 shadow-[0_0_25px_rgba(0,229,255,0.15)]"
           >
             <span className="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse" />
-            <span className="text-[11px] font-mono tracking-widest uppercase text-[#00E5FF] font-medium">
+            <span className="text-[11px] font-mono tracking-widest uppercase text-[#00E5FF] font-semibold">
               {badge}
             </span>
+            <span className="text-zinc-600 font-mono text-[10px]">|</span>
+            <span className="text-zinc-400 font-mono text-[10px] tracking-wider">v2.0 CINEMATIC</span>
           </motion.div>
 
-          {/* Large Editorial Name */}
+          {/* Large Editorial Headline */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col mb-4"
+            transition={{ duration: 0.85, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col mb-4 overflow-hidden"
           >
-            <h1 className="text-5xl sm:text-7xl xl:text-8xl font-black tracking-tighter text-white uppercase leading-[0.92]">
+            <h1 className="text-6xl sm:text-8xl xl:text-9xl font-black tracking-tighter text-white uppercase leading-[0.9] select-none">
               DHIPASH
             </h1>
-            <span className="text-4xl sm:text-6xl xl:text-7xl font-bold tracking-tight text-zinc-400 uppercase leading-[0.96]">
+            <span className="text-4xl sm:text-6xl xl:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-zinc-300 via-zinc-400 to-zinc-500 uppercase leading-[0.96]">
               HARI DEV M
             </span>
           </motion.div>
 
-          {/* Animated Matrix Tags */}
+          {/* Kinetic Matrix Technical Tags */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-wrap gap-2.5 my-5"
           >
-            {['AI & Data Science', 'Frontend Design', 'Motion Design', 'Creative Technology'].map((pill, i) => (
+            {[
+              'AI & Data Science',
+              'Frontend Design',
+              'Motion Design',
+              'Creative Technology',
+            ].map((pill, i) => (
               <span
                 key={pill}
-                className="px-3 py-1 text-xs font-mono rounded-md bg-white/[0.03] border border-white/10 text-zinc-300 backdrop-blur-sm"
+                className="px-3 py-1.5 text-xs font-mono rounded-lg bg-white/[0.03] border border-white/10 text-zinc-300 backdrop-blur-sm hover:border-[#00E5FF]/40 transition-colors"
               >
-                <span className="text-[#00E5FF] mr-1.5 opacity-60">0{i + 1} //</span>
+                <span className="text-[#00E5FF] mr-1.5 opacity-80 font-bold">0{i + 1} //</span>
                 {pill}
               </span>
             ))}
@@ -84,12 +109,12 @@ export const Hero: React.FC<HeroProps> = ({ settings }) => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="text-base sm:text-lg text-zinc-400 font-normal leading-relaxed max-w-xl mb-9"
+            className="text-base sm:text-lg text-zinc-300 font-light leading-relaxed max-w-xl mb-9"
           >
             {supporting}
           </motion.p>
 
-          {/* Interactive CTAs */}
+          {/* Interactive Magnetic Action CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -98,7 +123,7 @@ export const Hero: React.FC<HeroProps> = ({ settings }) => {
           >
             <MagneticButton
               onClick={() => scrollToSection('projects')}
-              className="px-7 py-3.5 rounded-full bg-[#00E5FF] text-black font-semibold text-sm tracking-wide shadow-[0_0_30px_rgba(0,229,255,0.4)] hover:shadow-[0_0_40px_rgba(0,229,255,0.6)] hover:bg-[#33ebff] transition-all group"
+              className="px-8 py-4 rounded-full bg-[#00E5FF] text-black font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_35px_rgba(0,229,255,0.45)] hover:shadow-[0_0_45px_rgba(0,229,255,0.65)] hover:bg-[#33ebff] transition-all group cursor-pointer"
               data-cursor="EXPLORE"
             >
               <span className="flex items-center gap-2">
@@ -109,7 +134,7 @@ export const Hero: React.FC<HeroProps> = ({ settings }) => {
 
             <MagneticButton
               onClick={() => scrollToSection('contact')}
-              className="px-7 py-3.5 rounded-full bg-zinc-900/90 text-zinc-200 font-medium text-sm tracking-wide border border-white/15 hover:border-[#00E5FF]/50 hover:text-white transition-all group"
+              className="px-8 py-4 rounded-full bg-zinc-900/90 text-zinc-200 font-medium text-xs sm:text-sm tracking-wider uppercase border border-white/15 hover:border-[#00E5FF]/50 hover:text-white transition-all group cursor-pointer"
               data-cursor="CONNECT"
             >
               <span className="flex items-center gap-2">
@@ -119,38 +144,36 @@ export const Hero: React.FC<HeroProps> = ({ settings }) => {
             </MagneticButton>
           </motion.div>
 
-          {/* Factual Sub-status */}
+          {/* Factual Institutional Grounding */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6 }}
-            className="mt-10 pt-6 border-t border-white/10 flex items-center gap-4 text-xs font-mono text-zinc-500"
+            className="mt-10 pt-6 border-t border-white/10 flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-400"
           >
-            <span className="flex items-center gap-1.5 text-zinc-400">
+            <span className="flex items-center gap-1.5 text-zinc-300 font-medium">
               <Terminal className="w-3.5 h-3.5 text-[#00E5FF]" />
               Ramco Institute of Technology
             </span>
             <span>•</span>
-            <span>B.Tech AI & Data Science (2024–2028)</span>
+            <span className="text-zinc-400">B.Tech AI & Data Science (2024–2028)</span>
+            <span>•</span>
+            <span className="text-[#00E5FF] font-semibold">CGPA 7.24</span>
           </motion.div>
         </div>
 
-        {/* Right Column: 3D Interactive React Three Fiber Canvas */}
+        {/* Right Column: 3D Interactive React Three Fiber Centerpiece */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-5 relative w-full h-[400px] sm:h-[480px] lg:h-[580px] flex items-center justify-center"
+          transition={{ duration: 1.1, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          className="lg:col-span-5 relative w-full h-[400px] sm:h-[480px] lg:h-[600px] flex items-center justify-center"
         >
-          <Suspense fallback={
-            <div className="w-64 h-64 rounded-full border border-[#00E5FF]/20 flex items-center justify-center animate-pulse">
-              <div className="w-32 h-32 rounded-full border border-dashed border-[#00E5FF]/30 animate-spin" />
-            </div>
-          }>
+          <Suspense fallback={<CinematicHoloFallback />}>
             <HeroScene />
           </Suspense>
         </motion.div>
       </div>
-    </section>
+    </motion.section>
   );
 };

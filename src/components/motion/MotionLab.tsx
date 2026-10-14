@@ -1,10 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { Sparkles, Move, Eye, Layers, Play, RefreshCw, Zap } from 'lucide-react';
+import { Sparkles, Move, Eye, Layers, Play, RefreshCw, Zap, Gamepad2, ShieldAlert, Terminal, Maximize2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { MagneticButton } from '../common/MagneticButton';
+import { CyberRunnerGame } from '../game/CyberRunnerGame';
+import { CyberOpsGame } from '../cyberops/CyberOpsGame';
+
+type TabType = 'cyber-ops' | 'runner' | 'tilt' | 'reveal' | 'stagger' | 'magnetic';
 
 export const MotionLab: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'tilt' | 'reveal' | 'stagger' | 'magnetic'>('tilt');
+  const [activeTab, setActiveTab] = useState<TabType>('cyber-ops');
   const [revealKey, setRevealKey] = useState(0);
 
   // 3D Card Tilt mechanics
@@ -30,60 +35,99 @@ export const MotionLab: React.FC = () => {
   };
 
   return (
-    <section id="motion-lab" className="py-28 relative border-t border-white/5 bg-[#07080A]">
+    <section id="motion-lab" className="py-32 relative border-t border-white/5 bg-[#07080A] overflow-hidden">
+      {/* Background ambient glows */}
+      <div className="absolute top-1/4 right-10 w-96 h-96 bg-[#00E5FF]/5 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute bottom-10 left-10 w-96 h-96 bg-purple-600/5 rounded-full blur-[140px] pointer-events-none -z-10" />
+
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Section Index Indicator */}
         <div className="flex items-center gap-3 mb-6">
           <span className="text-xs font-mono text-[#00E5FF]">04 //</span>
           <span className="text-xs font-mono tracking-widest uppercase text-zinc-400">
-            Interaction & Motion Lab
+            Interactive Technical Arena & Physics Simulation
           </span>
           <div className="h-px bg-white/10 flex-1 ml-4" />
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        {/* Section Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-3">
-              Motion / Interaction Lab
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#00E5FF]/10 border border-[#00E5FF]/20 text-[10px] font-mono text-[#00E5FF] uppercase tracking-wider mb-3">
+              <ShieldAlert className="w-3.5 h-3.5 text-[#00E5FF]" />
+              <span>CYBER OPS // THE CODEBREAKER PROTOCOL</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-2 uppercase">
+              ENTER CYBER OPS
             </h2>
-            <p className="text-base text-zinc-400 max-w-xl font-light">
-              Demonstrating physics-based gesture control, 3D surface tilt, kinetic text reveals, and choreographed stagger kinematics.
+            <p className="text-sm sm:text-base font-mono text-[#00E5FF] mb-2">
+              Think like an engineer. Investigate like an analyst. Break the code.
+            </p>
+            <p className="text-xs sm:text-sm text-zinc-400 max-w-2xl font-light leading-relaxed">
+              Enter a fictional digital operations center where every mission challenges your programming, logic, and cybersecurity knowledge. Play directly in your browser without creating an account.
             </p>
           </div>
 
-          {/* Interactive Mode Selector */}
-          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-zinc-900/80 border border-white/10 w-fit">
-            {[
-              { id: 'tilt', label: '3D Card Tilt' },
-              { id: 'reveal', label: 'Kinetic Reveal' },
-              { id: 'stagger', label: 'Matrix Stagger' },
-              { id: 'magnetic', label: 'Magnetic Physics' },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all ${
-                  activeTab === tab.id
-                    ? 'bg-[#00E5FF] text-black font-semibold shadow-[0_0_15px_rgba(0,229,255,0.4)]'
-                    : 'text-zinc-400 hover:text-white'
-                }`}
-                data-cursor="PLAY"
-              >
-                {tab.label}
-              </button>
-            ))}
+          {/* Quick Route & Controls Launcher */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+            <Link
+              to="/cyber-ops"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-950/80 hover:bg-cyan-900/60 border border-[#00E5FF]/40 text-xs font-mono text-[#00E5FF] transition-all hover:scale-105 shadow-[0_0_20px_rgba(0,229,255,0.2)]"
+            >
+              <Maximize2 className="w-3.5 h-3.5" />
+              <span>Full-Screen Command Center (/cyber-ops)</span>
+            </Link>
           </div>
         </div>
 
-        {/* Experiment Canvas Stage */}
-        <div className="p-8 md:p-14 rounded-3xl bg-gradient-to-b from-[#0D1017] to-[#08090B] border border-white/10 relative overflow-hidden min-h-[460px] flex items-center justify-center">
+        {/* Interactive Mode Selector Tabs */}
+        <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-zinc-900/80 border border-white/10 w-fit mb-6">
+          {[
+            { id: 'cyber-ops', label: '🕵️ Cyber Ops: Codebreaker' },
+            { id: 'runner', label: '🎮 Cyber Runner 3D' },
+            { id: 'tilt', label: '3D Card Tilt' },
+            { id: 'reveal', label: 'Kinetic Reveal' },
+            { id: 'stagger', label: 'Matrix Stagger' },
+            { id: 'magnetic', label: 'Magnetic Physics' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as TabType)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-mono transition-all cursor-pointer ${
+                activeTab === tab.id
+                  ? 'bg-[#00E5FF] text-black font-semibold shadow-[0_0_15px_rgba(0,229,255,0.4)]'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+              data-cursor="PLAY"
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Experiment Canvas Stage (The Box from the Screenshot) */}
+        <div className="p-3 sm:p-6 md:p-8 rounded-3xl bg-gradient-to-b from-[#0D1017] to-[#08090B] border border-white/10 relative overflow-hidden min-h-[560px] sm:min-h-[660px] flex items-center justify-center shadow-2xl">
           {/* Subtle Ambient lighting */}
           <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-[#00E5FF]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#00E5FF]/10 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Experiment 1: 3D Card Tilt with Specular Reflection */}
+          {/* Mode 1: Cyber Ops: The Codebreaker (Primary Game inside the Box) */}
+          {activeTab === 'cyber-ops' && (
+            <div className="w-full h-full flex flex-col items-center">
+              <CyberOpsGame />
+            </div>
+          )}
+
+          {/* Mode 2: Cyber Runner 3D Arcade Game */}
+          {activeTab === 'runner' && (
+            <div className="w-full h-full flex flex-col items-center">
+              <CyberRunnerGame />
+            </div>
+          )}
+
+          {/* Mode 3: 3D Card Tilt with Specular Reflection (Exact Original from Screenshot) */}
           {activeTab === 'tilt' && (
-            <div className="perspective-[1000px] flex flex-col items-center">
+            <div className="perspective-[1000px] flex flex-col items-center py-6">
               <motion.div
                 ref={cardRef}
                 onMouseMove={handleCardMouseMove}
@@ -126,9 +170,9 @@ export const MotionLab: React.FC = () => {
             </div>
           )}
 
-          {/* Experiment 2: Kinetic Text Reveal */}
+          {/* Mode 4: Kinetic Text Reveal */}
           {activeTab === 'reveal' && (
-            <div className="max-w-2xl text-center flex flex-col items-center" key={revealKey}>
+            <div className="max-w-2xl text-center flex flex-col items-center py-10" key={revealKey}>
               <div className="overflow-hidden mb-4">
                 <motion.h3
                   initial={{ y: 80, opacity: 0 }}
@@ -158,7 +202,7 @@ export const MotionLab: React.FC = () => {
               >
                 <button
                   onClick={() => setRevealKey(k => k + 1)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900 border border-white/15 text-xs font-mono text-[#00E5FF] hover:bg-zinc-800 transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900 border border-white/15 text-xs font-mono text-[#00E5FF] hover:bg-zinc-800 transition-colors cursor-pointer"
                   data-cursor="REPLAY"
                 >
                   <RefreshCw className="w-3.5 h-3.5" />
@@ -168,9 +212,9 @@ export const MotionLab: React.FC = () => {
             </div>
           )}
 
-          {/* Experiment 3: Matrix Grid Stagger */}
+          {/* Mode 5: Matrix Grid Stagger */}
           {activeTab === 'stagger' && (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center py-8">
               <motion.div
                 className="grid grid-cols-4 sm:grid-cols-6 gap-3 max-w-lg mb-6"
                 initial="hidden"
@@ -203,13 +247,13 @@ export const MotionLab: React.FC = () => {
             </div>
           )}
 
-          {/* Experiment 4: Magnetic Physics Button */}
+          {/* Mode 6: Magnetic Physics Button */}
           {activeTab === 'magnetic' && (
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center py-8">
               <div className="p-12 mb-4">
                 <MagneticButton
                   strength={0.5}
-                  className="w-40 h-40 rounded-full bg-gradient-to-tr from-[#00E5FF] to-blue-500 text-black font-extrabold text-sm tracking-widest uppercase shadow-[0_0_50px_rgba(0,229,255,0.4)] flex flex-col items-center justify-center gap-2 select-none group"
+                  className="w-40 h-40 rounded-full bg-gradient-to-tr from-[#00E5FF] to-blue-500 text-black font-extrabold text-sm tracking-widest uppercase shadow-[0_0_50px_rgba(0,229,255,0.4)] flex flex-col items-center justify-center gap-2 select-none group cursor-pointer"
                   data-cursor="PULL"
                 >
                   <Zap className="w-6 h-6 text-black group-hover:scale-125 transition-transform" />
