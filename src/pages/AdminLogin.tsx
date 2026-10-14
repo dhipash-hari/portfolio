@@ -66,13 +66,36 @@ export const AdminLogin: React.FC = () => {
         </p>
 
         {/* Backend mode indicator */}
-        <div className="mb-6 p-3 rounded-xl bg-zinc-900/80 border border-white/5 flex items-center justify-between text-xs font-mono">
+        <div className="mb-4 p-3 rounded-xl bg-zinc-900/80 border border-white/5 flex items-center justify-between text-xs font-mono">
           <span className="text-zinc-500">BACKEND STATE:</span>
           <span className={`flex items-center gap-1.5 ${isLiveSupabase ? 'text-emerald-400' : 'text-amber-400'}`}>
             <span className={`w-1.5 h-1.5 rounded-full ${isLiveSupabase ? 'bg-emerald-400' : 'bg-amber-400'} animate-pulse`} />
             {isLiveSupabase ? 'Supabase PostgreSQL' : 'Local Dev Fallback'}
           </span>
         </div>
+
+        {!isLiveSupabase && (
+          <div className="mb-6 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-mono">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-amber-300 font-bold text-[11px] uppercase tracking-wider">DEV FALLBACK CREDENTIALS</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail('admin@dhipash.dev');
+                  setPassword('admin123');
+                }}
+                className="text-[11px] text-[#00E5FF] hover:underline cursor-pointer"
+              >
+                Auto-Fill
+              </button>
+            </div>
+            <p className="text-zinc-400 text-[11px] leading-relaxed">
+              Email: <span className="text-white">admin@dhipash.dev</span>
+              <br />
+              Password: <span className="text-white">admin123</span>
+            </p>
+          </div>
+        )}
 
         {errorMsg && (
           <div className="mb-6 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono flex items-center gap-2">
